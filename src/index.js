@@ -7,12 +7,13 @@ import './styles.css';
 
 import ltemsTemplete from './template/card.hbs';
 
+var debounce = require('lodash.debounce');
+
 
 console.log('Hello');
 
 
-
-let name = 'can';
+const input = document.querySelector('#name-input');
 
 function fnFetch(name) {
     const url = `https://restcountries.eu/rest/v2/name/${name}`;
@@ -24,25 +25,21 @@ function fnFetch(name) {
             const cardRef = document.querySelector('.js-menu');
             cardRef.insertAdjacentHTML('beforeend', card);
         })
-        .catch(console.log('Ошибка!!!'));
-};
-
-fnFetch(name);
+            .catch(error => console.warn('Ошибка!!!'));  // дорабоатать
+    };
 
 
-const input = document.querySelector('#name-input');
-const output = document.querySelector('#name-output');
 
 const fn = () => {
-    if (input.value === '') {
-        output.textContent = 'незнакомец';
-        return;
-    }
-    output.textContent = input.value;
+
+
+    fnFetch(input.value);
 }
 
-input.addEventListener('input', fn);
+input.addEventListener('input', debounce((fn), 1000));
 
-
+// 0. Очистка контанта при добавлении 
+// 1. Ограничить кооличесвто иформации на страницу
+// 2. Оповещение
 
 
