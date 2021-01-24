@@ -1,45 +1,63 @@
 import './styles.css';
 
-// ----------------------------> Сделали импорт данных
-// import menu from './menu.json'; 
-// console.table(menu);
+
+// ----------------------------> Импортирт плагина уведомлений - PNotify
+import { alert, defaultModules } from 'node_modules/@pnotify/core/dist/PNotify.js';
+import * as PNotifyMobile from 'node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
+
 // ----------------------------> Создали шабон разметки и импортировали его
+import cardTemplete from './template/card.hbs';
+import listTemplete from './template/list.hbs';
 
-import ltemsTemplete from './template/card.hbs';
-
+// ----------------------------> Импортировали ф-ю debounce
 var debounce = require('lodash.debounce');
 
 
 console.log('Hello');
 
-
 const input = document.querySelector('#name-input');
 
-function fnFetch(name) {
+function fnFetchServer(name) {
     const url = `https://restcountries.eu/rest/v2/name/${name}`;
     return fetch(url)
         .then(responce => responce.json())
-        .then(data => {
-            console.log(data);
-            const card = ltemsTemplete(data)
-            const cardRef = document.querySelector('.js-menu');
-            cardRef.insertAdjacentHTML('beforeend', card);
-        })
-            .catch(error => console.warn('Ошибка!!!'));  // дорабоатать
-    };
+        .then(data => fnTemplate(data))
+        .catch(() => console.warn('Ошибка связи с сервером'));  // дорабоатать
+};
 
+const fnTemplate = (data) => {
+    console.log(data);
+    const boxRef = document.querySelector('.js-search');
+    boxRef.innerHTML = '';
+    
+    if (data.length > 10) {
+        console.log('Укажите более точно название страны');
+        defaultModules.set(PNotifyMobile, {});
+        alert({
+            text: 'Notice me, senpai!'
+        });
+        return;
+    }
+    if (data.length === 1) {
+        const template = cardTemplete(data);
+        boxRef.insertAdjacentHTML('beforeend', template);
+        return;
+    }
+    if (data.length <= 10 && data.length > 2) {
+        const template = listTemplete(data);
+        boxRef.insertAdjacentHTML('beforeend', template);
+        return;
+    }
 
-
-const fn = () => {
-
-
-    fnFetch(input.value);
+    return console.warn('Введите боллее корректное название')
 }
 
-input.addEventListener('input', debounce((fn), 1000));
 
-// 0. Очистка контанта при добавлении 
-// 1. Ограничить кооличесвто иформации на страницу
-// 2. Оповещение
+const fnFetch = () => {
+    fnFetchServer(input.value);
+}
+
+input.addEventListener('input', debounce((fnFetch), 1000));
+
 
 
