@@ -4,33 +4,39 @@ import cardTemplete from './template/card.hbs';
 import listTemplete from './template/list.hbs';
 
 // ----------------------------> Импортируем плагин уведомлений - PNotify
-import { alert, info, error, defaultModules} from '../node_modules/@pnotify/core/dist/PNotify.js';
+import { notice, success, info, error, defaultModules} from '../node_modules/@pnotify/core/dist/PNotify.js';
 import "@pnotify/core/dist/PNotify.css";                     //---> Импортирует стилей
 import '@pnotify/core/dist/BrightTheme.css';                 //---> Импортирует цветовую гамму
 import 'material-design-icons/iconfont/material-icons.css'; //---> Импортирует иконки
 
-// ----------------------------> Импортируем плагин уведомлений - PNotify
+// ----------------------------> Изменили дефолтные настройки уведомлений (PNotify)
 const PNotify = {
     title: 'Info',
-    delay: 2500,          //---> Удаляется автоматически
+    delay: 1500,          //---> Удаляется автоматически
     sticker: false,       //---> Удаляет стиккер
     closerHover: false,   //---> Видно иконку закрытия
 }
 
-// ----------------------------> Импортировали ф-ю debounce
+// ----------------------------> Импортировали ф-ю debounce для задержки
 var debounce = require('lodash.debounce');
 
+// ---------------------------------------------------------------------
 
 console.log('Hello');
-
 const input = document.querySelector('#name-input');
+
+const fnFetch = () => {
+    fnFetchServer(input.value);
+}
+
+input.addEventListener('input', debounce(fnFetch, 500));
 
 function fnFetchServer(name) {
     const url = `https://restcountries.eu/rest/v2/name/${name}`;
     return fetch(url)
         .then(responce => responce.json())
         .then(data => fnTemplate(data))
-        .catch(() => console.warn('Ошибка связи с сервером'));  // дорабоатать
+        .catch(() => console.warn('Ошибка связи с сервером'));
 };
 
 const fnTemplate = (data) => {
@@ -39,7 +45,6 @@ const fnTemplate = (data) => {
     boxRef.innerHTML = '';
     
     if (data.length > 10) {
-        console.log('Укажите более точно название страны');
         info({
             ...PNotify,
             text: 'Результат поиска > 10 стран. Введите более точное название страны.',
@@ -49,11 +54,19 @@ const fnTemplate = (data) => {
     if (data.length === 1) {
         const template = cardTemplete(data);
         boxRef.insertAdjacentHTML('beforeend', template);
+        success({
+            ...PNotify,
+            text: `По вашему запросу найдена ${data.length} страна`,
+        });
         return;
     }
     if (data.length <= 10 && data.length > 2) {
         const template = listTemplete(data);
         boxRef.insertAdjacentHTML('beforeend', template);
+        notice({
+            ...PNotify,
+            text: `По вашему запросу найдено ${data.length} стран`,
+        });
         return;
     }
 
@@ -62,14 +75,10 @@ const fnTemplate = (data) => {
         text: 'По вашему запросу ничего не найдено.',
     });
     
-    return console.warn('Введите боллее корректное название')
+    return;
 }
 
-const fnFetch = () => {
-    fnFetchServer(input.value);
-}
 
-input.addEventListener('input', debounce((fnFetch), 1000));
 
 
 
