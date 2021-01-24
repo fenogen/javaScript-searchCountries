@@ -18,3 +18,13 @@ body {
    */
   background-image: url('./images/bg-pattern.png');
 }
+
+.box {
+  padding-top: 200px;
+  padding-right: 100px;
+  padding-left: 100px;
+}
+
+.height {
+  margin-bottom: 20px;
+}

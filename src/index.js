@@ -1,3 +1,4 @@
+import './styles.css';
 
 // ----------------------------> Создали шабоны разметки и импортировали их
 import cardTemplete from './template/card.hbs';
