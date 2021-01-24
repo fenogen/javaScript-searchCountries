@@ -2,12 +2,12 @@
 
 Модуль 12 - AJAX. Fetch API. CRUD
 
-Поиск стран по их названию:
+ПОИСК СТРАН ПО ИХ НАЗВАНИЮ:
 
 - Подключение к бэкенду Rest Countries API: https://restcountries.eu
 
 Использовано:
 
-- шаблонизатор - Handlebars;
+- Шаблонизатор - Handlebars;
 - Функция задержки - lodash.debounce;
 - Плагин уведомления - PNotify;
