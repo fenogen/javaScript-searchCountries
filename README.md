@@ -8,6 +8,7 @@
 
 Использовано:
 
+- Webpack - https://github.com/luxplanjay/webpack-starter-kit
 - Шаблонизатор - Handlebars (https://handlebarsjs.com/)
 - Функция задержки - lodash.debounce
   (https://www.npmjs.com/package/lodash.debounce)
