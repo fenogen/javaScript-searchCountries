@@ -8,6 +8,7 @@
 
 Использовано:
 
-- Шаблонизатор - Handlebars;
-- Функция задержки - lodash.debounce;
-- Плагин уведомления - PNotify;
+- Шаблонизатор - Handlebars (https://handlebarsjs.com/)
+- Функция задержки - lodash.debounce
+  (https://www.npmjs.com/package/lodash.debounce)
+- Плагин уведомления - PNotify (https://sciactive.com/pnotify/)
